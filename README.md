@@ -1,6 +1,6 @@
 # c-transformer
 
-A transformer-based language model implemented from scratch in C and CUDA. No frameworks. The full stack is covered: a BPE tokenizer, CPU and GPU forward passes, analytical backpropagation, AdamW training, custom CUDA kernels (Flash Attention, fused LayerNorm), and a standalone inference binary.
+A transformer-based language model implemented from scratch in C++ and CUDA. No frameworks. The full stack is covered: a BPE tokenizer, CPU and GPU forward passes, analytical backpropagation, AdamW training, custom CUDA kernels (Flash Attention, fused LayerNorm), and a standalone inference binary.
 
 Karpathy's [llm.c](https://github.com/karpathy/llm.c) is used as a reference
 
@@ -10,7 +10,7 @@ Karpathy's [llm.c](https://github.com/karpathy/llm.c) is used as a reference
 
 | Component | Version |
 |-----------|---------|
-| C compiler | GCC or Clang (C99 / C11) |
+| C++ compiler | GCC or Clang with C++17 support |
 | CUDA Toolkit | 12.x (`nvcc`) |
 | GPU | NVIDIA (consumer GPU for development; A100 for full training) |
 | Profiling (optional) | Nsight Compute (`ncu`), Nsight Systems (`nsys`) |
@@ -27,7 +27,7 @@ make test     # run unit tests
 make train    # run training
 ```
 
-Host code is compiled with `gcc`/`clang`; CUDA kernels with `nvcc`. The Makefile links them together — no CMake, Bazel, or Meson required.
+Host code is compiled with `g++`/`clang++`; CUDA kernels with `nvcc`. The Makefile links them together — no CMake, Bazel, or Meson required.
 
 ---
 
@@ -56,11 +56,11 @@ Token IDs
 
 ### BPE Tokenizer
 
-Byte-pair encoding trained from scratch. Produces a vocabulary file and a merges file. Correctness is verified with encode/decode round-trips on arbitrary strings. An open-addressing hashmap (~200 lines of C) handles pair counts; `uthash` is a drop-in alternative.
+Byte-pair encoding trained from scratch. Produces a vocabulary file and a merges file. Correctness is verified with encode/decode round-trips on arbitrary strings. An open-addressing hashmap (~200 lines of C++) handles pair counts; `uthash` is a drop-in alternative.
 
 ### CPU Forward Pass
 
-Full transformer forward pass in plain C loops, no CUDA. Correctness is established here before any GPU code is written. A small model (2 layers, 4 heads, dimension 32) with fixed weights is verified against hand-computed values on a 5-token input.
+Full transformer forward pass in plain C++ loops, no CUDA. Correctness is established here before any GPU code is written. A small model (2 layers, 4 heads, dimension 32) with fixed weights is verified against hand-computed values on a 5-token input.
 
 ### GPU Forward Pass
 
