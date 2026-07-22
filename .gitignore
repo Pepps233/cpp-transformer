@@ -1,0 +1,21 @@
+# Build artifacts
+build/
+*.o
+*.d
+bin/
+
+# Data and model artifacts
+data/*.bin
+data/*.txt
+data/*.json
+checkpoints/
+*.ckpt
+
+# Profiling output
+*.ncu-rep
+*.nsys-rep
+*.qdrep
+
+# Editor / OS 
+.DS_Store
+compile_commands.json
